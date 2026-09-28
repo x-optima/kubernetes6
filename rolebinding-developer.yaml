@@ -1,0 +1,17 @@
+# rolebinding-developer.yaml
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: developer-binding
+  namespace: default
+subjects:
+  # Пользователь, которому выдаём права
+  - kind: User
+    name: developer
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # Ссылка на созданную роль
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io

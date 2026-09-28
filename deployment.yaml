@@ -1,0 +1,49 @@
+# deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+        # Первый контейнер — nginx, веб-сервер
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            # Подключаем ConfigMap с веб-страницей
+            - name: web-content-volume
+              mountPath: /usr/share/nginx/html
+        # Второй контейнер — multitool, для диагностики
+        - name: multitool
+          image: wbitt/network-multitool
+          env:
+            # Переменные окружения для скрытия лишнего вывода
+            - name: HTTP_PORT
+              value: "1180"
+            - name: HTTPS_PORT
+              value: "11443"
+          ports:
+            - containerPort: 1180
+            - containerPort: 11443
+          volumeMounts:
+            # Тоже монтируем, чтобы multitool видел страницу
+            - name: web-content-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: web-content-volume
+          configMap:
+            # Имя ConfigMap, который мы создали
+            name: web-content

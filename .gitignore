@@ -1,0 +1,15 @@
+# TLS сертификаты
+tls.crt
+tls.key
+
+# RBAC ключи и сертификаты
+developer.key
+developer.csr
+developer.crt
+
+# Манифесты с секретами (содержат base64 от сертификата)
+secret-tls.yaml
+csr-developer.yaml
+
+#Заметки
+LONGRID.md

@@ -1,0 +1,25 @@
+# ingress-tls.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    # Настройка HTTPS через Secret
+    - hosts:
+        - myapp.example.com
+      secretName: tls-secret
+  rules:
+    - host: myapp.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-service
+                port:
+                  number: 80
